@@ -12,7 +12,7 @@
 
 3. **Load the Extension**
    - Click "Load unpacked" button
-   - Navigate to: `/Users/edwardwong/Desktop/Titan Hub/WorkSpace/ShopeeAutoRate/chrome-extension`
+   - Navigate to the `chrome-extension` folder in the downloaded repository
    - Click "Select" to load the extension
 
 4. **Verify Installation**

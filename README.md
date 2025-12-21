@@ -1,53 +1,156 @@
-# Shopee Auto Rate - Automation Tool
+# Shopee Auto Rate - Chrome Extension
 
-This project contains automation scripts to automatically rate all buyers with 5 stars on Shopee Seller Portal.
+<div align="center">
 
-## 📋 Project Overview
+🚀 **Automatically rate all your Shopee buyers with 5 stars in one click!**
 
-This automation tool helps Shopee sellers automatically rate completed orders with 5-star ratings and a custom comment. It supports processing all pages of completed orders until no more orders can be rated.
+[![Download Extension](https://img.shields.io/badge/Download-Extension%20v1.0.0-brightgreen?style=for-the-badge)](https://github.com/yourusername/ShopeeAutoRate/releases/download/v1.0.0/shopee-auto-rate-extension.zip)
+[![English](https://img.shields.io/badge/lang-English-blue?style=flat-square)](README.md)
+[![中文](https://img.shields.io/badge/lang-中文-red?style=flat-square)](README_CN.md)
 
-**Features:**
-- ✅ Automatically rate buyers with 5 stars
-- ✅ Add custom comment: "Thank you for your supporting."
-- ✅ Process multiple pages automatically
-- ✅ Stop when no more orders to rate
-- ✅ Progress tracking and logging
+</div>
 
-## 📁 Files Included
-
-### 🎯 Three Deployment Options:
-
-1. **Chrome Extension (NEW - Most User Friendly)** 🌟
-   - One-click installation
-   - Graphical user interface
-   - Real-time progress tracking
-   - Persistent settings
-   - See `chrome-extension/INSTALL.md`
-
-2. **Browser Console Script (Easiest for Developers)**
-   - `shopee_auto_rate_simple.js` - Copy & paste into browser console
-   - No installation required
-   - Instant execution
-
-3. **VPS Automation (For Scheduled Tasks)**
-   - `vps_automation.py` - Headless browser automation
-   - Cron job support
-   - Docker containerization
-   - See `VPS_DEPLOYMENT.md`
+A simple and powerful Chrome extension that helps Shopee sellers save time by automatically rating completed orders.
 
 ---
 
-## 🚀 Quick Start
+## ✨ Features
 
-### Method 1: Chrome Extension (Recommended) 🌟
+- 🎯 **One-Click Start** - Automatically opens Shopee page and starts rating
+- ⭐ **5-Star Ratings** - Rates all buyers with 5 stars automatically
+- 💬 **Custom Comments** - Add your personalized thank you message
+- ⚡ **Fast Mode** - Process orders in ~3.2 seconds each
+- 📊 **Progress Tracking** - Real-time stats and activity log
+- 🔄 **Multi-Page Support** - Automatically processes all pages
+- 💾 **Save Settings** - Your preferences are remembered
+- ⏸ **Pause/Resume**
 
-**The easiest way to use this tool!**
+**Option A: Download Release** (Recommended)
+1. Click the green **Download Extension** button above
+2. Extract the ZIP file
 
-#### Installation:
-1. Open Chrome and go to `chrome://extensions/`
-2. Enable "Developer mode" (top right)
-3. Click "Load unpacked"
-4. Select the `chrome-extension` folder
+**Option B: Clone Repository**
+```bash
+git clone https://github.com/yourusername/ShopeeAutoRate.git
+```
+Download or clone this repository:
+```bash
+git clone https://github.com/yourusername/ShopeeAutoRate.git
+```
+
+Or download as ZIP and extract it.
+
+### Step 2: Install in Chrome
+
+1. Open Chrome and navigate to `chrome://extensions/`
+2. Enable **"Developer mode"** (toggle in top right corner)
+3. Click **"Load unpacked"**
+4. Select the `chrome-extension` folder from the downloaded files
+5. Done! The extension icon will appear in your Chrome toolbar
+
+![Installation Demo](https://via.placeholder.com/800x400?text=Installation+Screenshot)
+
+---
+
+## 🎮 How to Use
+
+### Quick Start (Recommended)
+
+1. **Click the extension icon** in Chrome toolbar
+2. **Click "🚀 Open Page & Auto Start"** button
+3. That's it! The extension will:
+   - Open Shopee Seller Order page automatically
+   - Wait for the page to load
+   - Start rating all orders with 5 stars
+
+Sit back and relax while it works! ☕
+
+### Manual Start (Alternative)
+
+1. Navigate to [Shopee Seller Order Page](https://seller.shopee.com.my/portal/sale/order?type=completed)
+2. Make sure you're logged in
+3. Click the extension icon
+4. (Optional) Adjust settings:
+   - **Comment**: Your thank you message
+   - **Fast Mode**: Toggle for speed (default: ON)
+   - **Max Pages**: Set limit or leave as 0 for all pages
+5. Click **"▶ Start Auto Rating"**
+
+### Monitor Progress
+
+Watch the extension popup for:
+- **Status**: Current state (Running/Stopped/Completed)
+- **Processed**: Number of orders rated
+- **Current Page**: Page being processed
+- **Activity Log**: Real-time actions
+
+### Stop or Pause
+
+Click **"⏸ Stop"** button anytime to pause. You can resume later.
+
+---
+
+## ⚙️ Settings
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Comment** | Thank you message for buyers | "Thank you for your supporting." |
+| **Fast Mode** | Speed up processing | ✅ Enabled (3.2s per order) |
+| **Max Pages** | Limit pages to process (0 = all) | 0 (process all) |
+
+---
+
+## 📊 Performance
+
+- **Fast Mode**: ~3.2 seconds per order
+- **Normal Mode**: ~8.5 seconds per order
+- **Example**: 100 orders ≈ 5-15 minutes
+
+---
+
+## 🔧 Troubleshooting
+
+### Extension not working?
+- Refresh the Shopee page after installing
+- Make sure you're on the correct page: `/portal/sale/order?type=completed`
+- Check that you're logged in to Shopee Seller account
+
+### "Not on Shopee" message?
+- Navigate to Shopee Seller Order page first
+- URL must include: `seller.shopee.com.my`
+
+### Extension icon not visible?
+- Click the puzzle icon (🧩) in Chrome toolbar
+- Pin "Shopee Auto Rate" for easy access
+
+### Need more help?
+- Open browser console (Press F12) to see detailed logs
+- Check for any error messages
+
+---
+
+## ⚠️ Important Notes
+
+- This extension only works on **Shopee Malaysia** (`seller.shopee.com.my`)
+- Make sure you're logged in to your Shopee Seller account
+- The extension only rates orders on the "Completed" tab
+- Keep the browser tab open while processing
+
+---
+
+## 🤝 Support
+
+If you find this extension helpful, please give it a ⭐ star!
+
+---
+
+## 📄 License
+
+MIT License - Feel free to use and modify for your needs.
+
+---
+
+**Made with ❤️ for Shopee Sellers**
 5. Done! Extension icon will appear in toolbar
 
 #### Usage:

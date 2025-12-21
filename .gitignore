@@ -1,3 +1,4 @@
+# Development files
 .env
 .env.local
 logs/
@@ -11,4 +12,29 @@ dist/
 .DS_Store
 *.crx
 *.pem
-chrome-extension.zip
+.claude
+
+# Python automation (not for public)
+auto_rate.py
+run_automation.py
+vps_automation.py
+requirements.txt
+create_icons.py
+
+# Docker/VPS deployment (not for public)
+Dockerfile
+docker-compose.yml
+deploy.sh
+setup_cron.sh
+VPS_DEPLOYMENT.md
+
+# Old documentation (not for public)
+PROJECT_COMPLETE.md
+VERIFIED_WORKING_METHOD.md
+QUICKSTART.md
+QUICK_START_CN.md
+shopee_auto_rate_simple.js
+
+# Release checklist (internal)
+RELEASE_CHECKLIST.md
+PUBLIC_FILES.md

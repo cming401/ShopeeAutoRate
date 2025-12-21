@@ -1,134 +1,153 @@
-# Shopee 自动评分工具使用说明
+# Shopee 自动评价 - Chrome 扩展程序
 
-## ✅ 已验证可用 (2024-12-26)
+<div align="center">
 
-成功在 miss_atiey 的订单上测试：
-- ⭐⭐⭐⭐⭐ 5星评分
-- 评论: "Thank you for your supporting."
-- 验证通过：订单提交后不再显示"Rate"按钮
+🚀 **一键自动为所有 Shopee 买家评五星好评！**
+
+[![下载扩展程序](https://img.shields.io/badge/下载-扩展程序%20v1.0.0-brightgreen?style=for-the-badge)](https://github.com/yourusername/ShopeeAutoRate/releases/download/v1.0.0/shopee-auto-rate-extension.zip)
+[![English](https://img.shields.io/badge/lang-English-blue?style=flat-square)](README.md)
+[![中文](https://img.shields.io/badge/lang-中文-red?style=flat-square)](README_CN.md)
+
+</div>
+
+这是一个简单而强大的 Chrome 扩展程序，帮助 Shopee 卖家节省时间，自动为已完成的订单评价。
 
 ---
 
-## 快速开始
+## ✨ 功能特点
 
-### 1. 打开 Shopee Seller Portal
-访问：https://seller.shopee.com.my/portal/sale/order?type=completed
+- 🎯 **一键启动** - 自动打开 Shopee 页面并开始评价
+- ⭐ **五星好评** - 自动为所有买家评五星
+- 💬 **自定义评论** - 添加您的个性化感谢留言
+- ⚡ **快速模式** - 每个订单仅需约 3.2 秒
+- 📊 **进度追踪** - 实时统计和活动日志
+- 🔄 **多页支持** - 自动处理所有页面
+- 💾 **保存设置** - 记住您的偏好设置
+- ⏸ **暂停/继续** - 随时停止并继续
 
-### 2. 打开浏览器开发者工具
-- **Windows/Linux**: 按 `F12` 或 `Ctrl+Shift+J`
-- **Mac**: 按 `Cmd+Option+J`
+---
 
-### 3. 复制并运行脚本
+## 📥 安装步骤
 
-打开 `shopee_auto_rate_simple.js` 文件，复制全部内容，粘贴到 Console 控制台，按 Enter。
+### 第一步：下载
 
-### 4. 启动自动评分
+**方式 A：下载发行版**（推荐）
+1. 点击上方绿色的 **下载扩展程序** 按钮
+2. 解压 ZIP 文件
 
-```javascript
-const rater = new ShopeeAutoRater();
-await rater.start();
+**方式 B：克隆仓库**
+```bash
+git clone https://github.com/yourusername/ShopeeAutoRate.git
 ```
 
----
+### 第二步：安装到 Chrome
 
-## 重要提示
+1. 打开 Chrome 浏览器，访问 `chrome://extensions/`
+2. 开启右上角的 **"开发者模式"**
+3. 点击 **"加载已解压的扩展程序"**
+4. 选择下载文件中的 `chrome-extension` 文件夹
+5. 完成！扩展图标将出现在 Chrome 工具栏中
 
-### ✅ 优点
-1. **真实验证**: 使用 Chrome DevTools MCP 实际测试过
-2. **无误报**: 正确验证评分是否真的选上了（检查 `data-current-value="5"`）
-3. **Vue.js 兼容**: 使用完整鼠标事件序列触发 Vue 的事件处理器
-
-### ⚠️ 注意事项
-1. **不要关闭页面**: 脚本运行期间保持页面开启
-2. **监控进度**: 脚本会在控制台显示实时进度
-3. **出错暂停**: 如遇连续失败，脚本会自动暂停
-
-### 📊 数据规模
-- **总订单数**: 7,282
-- **总页数**: 183 页
-- **每页订单数**: 39 个
+![安装示范](https://via.placeholder.com/800x400?text=Installation+Screenshot)
 
 ---
 
-## 工作原理
+## 🎮 使用方法
 
-### 技术细节
-Shopee 使用 **Vue.js + EDS（Element Design System）** 评分组件。
+### 快速开始（推荐）
 
-普通的 `.click()` 方法**无效**，必须模拟完整的鼠标交互序列：
+1. **点击 Chrome 工具栏中的扩展图标**
+2. **点击 "🚀 打开页面并自动开始" 按钮**
+3. 就这么简单！扩展程序将会：
+   - 自动打开 Shopee 卖家订单页面
+   - 等待页面加载完成
+   - 自动开始为所有订单评五星
 
-```javascript
-// 6个事件按顺序触发
-['mouseover', 'mouseenter', 'mousemove', 'mousedown', 'mouseup', 'click']
-```
+坐下来放松，让它为您工作！☕
 
-### 验证方法
-检查 DOM 属性和样式：
-- `data-current-value` 应该是 "5"
-- 所有5个星星的 `width` 应该是 "24px"
-- 所有5个星星的 `opacity` 应该是 "1"
+### 手动启动（备选方式）
 
----
+1. 访问 [Shopee 卖家订单页面](https://seller.shopee.com.my/portal/sale/order?type=completed)
+2. 确保已登录您的卖家账号
+3. 点击扩展图标
+4. （可选）调整设置：
+   - **评论**：您的感谢留言
+   - **快速模式**：切换速度（默认：开启）
+   - **最大页数**：设置限制或保持为 0 处理所有页面
+5. 点击 **"▶ 开始自动评价"**
 
-## 故障排除
+### 监控进度
 
-### 如果评分失败
+在扩展弹窗中查看：
+- **状态**：当前状态（运行中/已停止/已完成）
+- **已处理**：已评价的订单数量
+- **当前页面**：正在处理的页面
+- **活动日志**：实时操作记录
 
-1. **检查页面是否正确加载**
-   - 确保在 Completed Orders 页面
-   - 确保能看到 "Rate" 按钮
+### 停止或暂停
 
-2. **重新加载脚本**
-   ```javascript
-   // 刷新页面后重新粘贴脚本
-   const rater = new ShopeeAutoRater();
-   await rater.start();
-   ```
-
-3. **查看控制台日志**
-   - 查找 ❌ 错误标记
-   - 查看具体失败原因
-
-### 如果某个订单卡住
-
-1. **手动关闭弹窗**
-   点击 Cancel 或按 ESC
-
-2. **继续下一个**
-   脚本会自动跳过并继续
+随时点击 **"⏸ 停止"** 按钮暂停。您可以稍后继续。
 
 ---
 
-## 文件说明
+## ⚙️ 设置选项
 
-- `shopee_auto_rate_simple.js` - 主脚本文件（已更新为验证可用版本）
-- `VERIFIED_WORKING_METHOD.md` - 技术文档（英文）
-- `README_CN.md` - 本文件（中文说明）
-
----
-
-## 测试结果
-
-### 之前版本（失败）
-- **测试**: 0/11 成功 (0%)
-- **问题**: 
-  - 使用错误的选择器
-  - 简单 `.click()` 无效
-  - 误报成功（日志显示成功但实际失败）
-
-### 当前版本（成功）
-- **测试**: 1/1 成功 (100%)
-- **改进**:
-  - 正确的 CSS 选择器 (`.eds-rate-star`)
-  - 完整的鼠标事件序列
-  - 真实的验证机制
+| 设置 | 说明 | 默认值 |
+|------|------|--------|
+| **评论** | 给买家的感谢留言 | "Thank you for your supporting." |
+| **快速模式** | 加快处理速度 | ✅ 已启用（每单 3.2 秒）|
+| **最大页数** | 限制处理页数（0 = 全部）| 0（处理全部）|
 
 ---
 
-## 联系方式
+## 📊 性能表现
 
-如有问题或需要帮助，请查看技术文档 `VERIFIED_WORKING_METHOD.md`
+- **快速模式**：每个订单约 3.2 秒
+- **普通模式**：每个订单约 8.5 秒
+- **示例**：100 个订单 ≈ 5-15 分钟
 
 ---
 
-**祝使用愉快！🎉**
+## 🔧 故障排除
+
+### 扩展程序无法工作？
+- 安装后刷新 Shopee 页面
+- 确保您在正确的页面：`/portal/sale/order?type=completed`
+- 检查是否已登录 Shopee 卖家账号
+
+### 显示"未在 Shopee 页面"？
+- 先访问 Shopee 卖家订单页面
+- URL 必须包含：`seller.shopee.com.my`
+
+### 扩展图标看不见？
+- 点击 Chrome 工具栏的拼图图标（🧩）
+- 固定"Shopee 自动评价"以便快速访问
+
+### 需要更多帮助？
+- 打开浏览器控制台（按 F12）查看详细日志
+- 检查是否有任何错误消息
+
+---
+
+## ⚠️ 重要提示
+
+- 此扩展程序仅适用于 **Shopee 马来西亚站**（`seller.shopee.com.my`）
+- 确保已登录您的 Shopee 卖家账号
+- 扩展程序仅评价"已完成"标签页中的订单
+- 处理过程中请保持浏览器标签页打开
+
+---
+
+## 🤝 支持
+
+如果您觉得这个扩展程序有帮助，请给它一个 ⭐ 星标！
+
+---
+
+## 📄 许可证
+
+MIT 许可证 - 可自由使用和修改。
+
+---
+
+**用 ❤️ 为 Shopee 卖家打造**
