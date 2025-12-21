@@ -160,13 +160,6 @@ async function runWithProgress(rater, maxPages) {
       break;
     }
 
-    // Check if there's a next page
-    const hasNext = await rater.hasNextPage();
-    if (!hasNext) {
-      logToBackground('No more pages available');
-      break;
-    }
-
     // Go to next page
     sendToPopup('progress', {
       processed: rater.totalProcessed,
@@ -174,7 +167,11 @@ async function runWithProgress(rater, maxPages) {
       message: 'Moving to next page...'
     });
 
-    await rater.goToNextPage();
+    const nextSuccess = await rater.goToNextPage();
+    if (!nextSuccess) {
+      logToBackground('No more pages available');
+      break;
+    }
     
     // Wait for page to load
     await rater.sleep(3000);
