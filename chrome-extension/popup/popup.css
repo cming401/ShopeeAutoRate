@@ -122,6 +122,19 @@ body {
   gap: 5px;
 }
 
+.btn-success {
+  background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);
+  color: white;
+  font-size: 15px;
+  padding: 14px;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(46, 125, 50, 0.4);
+}
+
 .btn-primary {
   background: #ee4d2d;
   color: white;

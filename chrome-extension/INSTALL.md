@@ -21,6 +21,22 @@
 
 ## How to Use
 
+### 🚀 Quick Start (Easiest Way)
+
+1. **One-Click Auto Start**
+   - Click the extension icon in Chrome toolbar
+   - Click the green **"🚀 Open Page & Auto Start"** button
+   - Extension will automatically:
+     - Open Shopee Seller Order page (or switch to existing tab)
+     - Wait for page to load
+     - Start rating automatically!
+
+**That's it!** No need to navigate manually. Just click and go! ☕
+
+---
+
+### Manual Start (Alternative)
+
 1. **Navigate to Shopee Seller Portal**
    - Go to: https://seller.shopee.com.my/portal/sale/order?type=completed
    - Make sure you're logged in
@@ -54,13 +70,15 @@
 
 ## Features
 
+✅ **One-Click Auto Start** - 🚀 Automatically opens page and starts rating  
 ✅ **Automatic 5-Star Rating** - Rates all orders with 5 stars  
 ✅ **Custom Comments** - Customize your thank you message  
 ✅ **Fast Mode** - Process orders in 3.2 seconds each (or 8.5s in normal mode)  
 ✅ **Multi-Page Support** - Automatically navigates through all pages  
 ✅ **Progress Tracking** - Real-time stats and activity log  
 ✅ **Safe Stop** - Pause anytime and resume later  
-✅ **Persistent Settings** - Your preferences are saved
+✅ **Persistent Settings** - Your preferences are saved  
+✅ **Tab Management** - Reuses existing Shopee tabs if already open
 
 ## Performance
 

@@ -2,6 +2,7 @@
 let isRunning = false;
 
 // DOM elements
+const quickStartBtn = document.getElementById('quick-start-btn');
 const startBtn = document.getElementById('start-btn');
 const stopBtn = document.getElementById('stop-btn');
 const statusEl = document.getElementById('status');
@@ -34,6 +35,86 @@ fastModeCheck.addEventListener('change', () => {
 
 maxPagesInput.addEventListener('change', () => {
   chrome.storage.sync.set({ maxPages: parseInt(maxPagesInput.value) });
+});
+
+// Quick start: Open Shopee page and auto start
+quickStartBtn.addEventListener('click', async () => {
+  try {
+    const shopeeUrl = 'https://seller.shopee.com.my/portal/sale/order?type=completed';
+    
+    addLog('🚀 Opening Shopee Seller page...', 'info');
+    statusEl.textContent = 'Opening page...';
+    
+    // Check if there's already a tab with Shopee seller page
+    const tabs = await chrome.tabs.query({ url: 'https://seller.shopee.com.my/*' });
+    
+    let targetTab;
+    if (tabs.length > 0) {
+      // Switch to existing tab and update URL
+      targetTab = tabs[0];
+      await chrome.tabs.update(targetTab.id, { 
+        url: shopeeUrl,
+        active: true 
+      });
+      addLog('✅ Switched to existing Shopee tab', 'success');
+    } else {
+      // Create new tab
+      targetTab = await chrome.tabs.create({ 
+        url: shopeeUrl,
+        active: true 
+      });
+      addLog('✅ Opened new Shopee tab', 'success');
+    }
+    
+    // Wait for page to load
+    addLog('⏳ Waiting for page to load...', 'info');
+    
+    // Listen for tab update (page loaded)
+    chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo, tab) {
+      if (tabId === targetTab.id && changeInfo.status === 'complete') {
+        chrome.tabs.onUpdated.removeListener(listener);
+        
+        // Wait a bit more for content script to be ready
+        setTimeout(async () => {
+          addLog('✅ Page loaded! Starting automation...', 'success');
+          
+          const settings = {
+            comment: commentInput.value,
+            fastMode: fastModeCheck.checked,
+            maxPages: parseInt(maxPagesInput.value)
+          };
+          
+          // Send start message
+          chrome.tabs.sendMessage(targetTab.id, {
+            action: 'start',
+            settings: settings
+          }, (response) => {
+            if (chrome.runtime.lastError) {
+              addLog('❌ Error: ' + chrome.runtime.lastError.message, 'error');
+              statusEl.textContent = 'Error';
+              return;
+            }
+            
+            if (response && response.success) {
+              isRunning = true;
+              startBtn.disabled = true;
+              stopBtn.disabled = false;
+              quickStartBtn.disabled = true;
+              statusEl.textContent = 'Running...';
+              addLog('🎉 Automation started successfully!', 'success');
+            } else {
+              addLog('⚠️ Failed to start automation', 'error');
+              statusEl.textContent = 'Failed';
+            }
+          });
+        }, 2000); // Wait 2 seconds for content script injection
+      }
+    });
+    
+  } catch (error) {
+    addLog('❌ Error: ' + error.message, 'error');
+    statusEl.textContent = 'Error';
+  }
 });
 
 // Add log entry
@@ -102,6 +183,7 @@ stopBtn.addEventListener('click', async () => {
         isRunning = false;
         startBtn.disabled = false;
         stopBtn.disabled = true;
+        quickStartBtn.disabled = false;
         statusEl.textContent = 'Stopped';
         addLog('⏸ Automation stopped', 'info');
       }
@@ -125,12 +207,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     isRunning = false;
     startBtn.disabled = false;
     stopBtn.disabled = true;
+    quickStartBtn.disabled = false;
     statusEl.textContent = 'Error';
   } else if (message.type === 'complete') {
     addLog(message.message, 'success');
     isRunning = false;
     startBtn.disabled = false;
     stopBtn.disabled = true;
+    quickStartBtn.disabled = false;
     statusEl.textContent = 'Completed';
   }
 });
