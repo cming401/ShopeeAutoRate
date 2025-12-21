@@ -4,7 +4,15 @@
 
 🚀 **一键自动为所有 Shopee 买家评五星好评！**
 
-[![下载扩展程序](https://img.shields.io/badge/下载-扩展程序%20v1.0.0-brightgreen?style=for-the-badge)](https://github.com/cming401/ShopeeAutoRate/raw/main/shopee-auto-rate-extension.zip)
+<br>
+
+<a href="https://github.com/cming401/ShopeeAutoRate/raw/main/shopee-auto-rate-extension.zip">
+  <img src="https://img.shields.io/badge/⬇️_下载扩展程序-v1.0.0-00C851?style=for-the-badge&logoColor=white" alt="下载扩展程序" height="60" />
+</a>
+
+<br>
+<br>
+
 [![English](https://img.shields.io/badge/lang-English-blue?style=flat-square)](README.md)
 [![中文](https://img.shields.io/badge/lang-中文-red?style=flat-square)](README_CN.md)
 
