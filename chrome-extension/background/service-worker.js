@@ -49,9 +49,9 @@ async function handleQuickStart(settings) {
     let targetTab;
     if (tabs.length > 0) {
       targetTab = tabs[0];
-      await chrome.tabs.update(targetTab.id, { active: true });
-      await chrome.tabs.reload(targetTab.id);
-      console.log('Reloading existing tab:', targetTab.id);
+      // Update to correct URL and make active
+      await chrome.tabs.update(targetTab.id, { url: shopeeUrl, active: true });
+      console.log('Updated existing tab to correct URL:', targetTab.id);
     } else {
       targetTab = await chrome.tabs.create({ url: shopeeUrl, active: true });
       console.log('Created new tab:', targetTab.id);
