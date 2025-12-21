@@ -110,22 +110,9 @@ Click **"⏸ Stop"** button anytime to pause. You can resume later.
 
 ## 🔧 Troubleshooting
 
-### Extension not working?
-- Refresh the Shopee page after installing
-- Make sure you're on the correct page: `/portal/sale/order?type=completed`
-- Check that you're logged in to Shopee Seller account
-
-### "Not on Shopee" message?
-- Navigate to Shopee Seller Order page first
-- URL must include: `seller.shopee.com.my`
-
-### Extension icon not visible?
-- Click the puzzle icon (🧩) in Chrome toolbar
-- Pin "Shopee Auto Rate" for easy access
-
-### Need more help?
-- Open browser console (Press F12) to see detailed logs
-- Check for any error messages
+- **Not working?** Refresh the Shopee page and try again
+- **Extension icon not visible?** Click puzzle icon (🧩) in Chrome toolbar and pin it
+- **Still issues?** Make sure you're logged in to Shopee Seller account
 
 ---
 
