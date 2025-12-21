@@ -5,17 +5,15 @@ console.log('Shopee Auto Rate service worker loaded');
 
 // Listen for extension installation
 chrome.runtime.onInstalled.addListener((details) => {
+  console.log('Extension installed/updated:', details.reason);
+  
   if (details.reason === 'install') {
-    console.log('Extension installed');
-    
     // Set default settings
     chrome.storage.sync.set({
       comment: 'Thank you for your supporting.',
       fastMode: true,
       maxPages: 0
     });
-  } else if (details.reason === 'update') {
-    console.log('Extension updated to version', chrome.runtime.getManifest().version);
   }
 });
 
@@ -47,11 +45,4 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   }
 });
 
-// Keep service worker alive with periodic ping
-chrome.alarms.create('keepAlive', { periodInMinutes: 1 });
-
-chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === 'keepAlive') {
-    console.log('Service worker keepAlive ping');
-  }
-});
+console.log('Service worker initialized successfully');
