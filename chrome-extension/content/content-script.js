@@ -84,7 +84,8 @@ async function startAutomation(settings) {
     // Create auto rater instance
     console.log('Creating ShopeeAutoRater instance with fastMode:', settings.fastMode);
     autoRater = new ShopeeAutoRater(settings.fastMode);
-    console.log('ShopeeAutoRater instance created');
+    autoRater.isRunning = true; // IMPORTANT: Set running flag!
+    console.log('ShopeeAutoRater instance created, isRunning:', autoRater.isRunning);
     
     // Override comment if provided
     if (settings.comment) {
@@ -178,8 +179,7 @@ async function runWithProgress(rater, maxPages) {
   }
 
   // Final summary
-  const summary = rater.getSummary();
-  logToBackground('Final summary: ' + JSON.stringify(summary));
+  logToBackground(`Automation finished! Total rated: ${rater.ratedCount}, Pages: ${rater.currentPage}`);
 }
 
 // Initialize
