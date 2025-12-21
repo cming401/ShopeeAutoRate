@@ -3,7 +3,6 @@ let isRunning = false;
 
 // DOM elements
 const quickStartBtn = document.getElementById('quick-start-btn');
-const startBtn = document.getElementById('start-btn');
 const stopBtn = document.getElementById('stop-btn');
 const statusEl = document.getElementById('status');
 const processedEl = document.getElementById('processed');
@@ -55,6 +54,8 @@ quickStartBtn.addEventListener('click', async () => {
   
   addLog('🚀 Starting... Check the Shopee tab!', 'info');
   statusEl.textContent = 'Starting...';
+  quickStartBtn.style.display = 'none';
+  stopBtn.style.display = 'inline-block';
 });
 
 // Add log entry
@@ -71,63 +72,20 @@ function addLog(message, type = 'info') {
   }
 }
 
-// Start automation
-startBtn.addEventListener('click', async () => {
-  try {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    
-    if (!tab.url.includes('seller.shopee.com.my')) {
-      addLog('❌ Please open Shopee Seller Order page first', 'error');
-      return;
-    }
-
-    const settings = {
-      comment: commentInput.value,
-      fastMode: fastModeCheck.checked,
-      maxPages: parseInt(maxPagesInput.value)
-    };
-
-    // Send start message to content script
-    chrome.tabs.sendMessage(tab.id, {
-      action: 'start',
-      settings: settings
-    }, (response) => {
-      if (chrome.runtime.lastError) {
-        addLog('❌ Error: ' + chrome.runtime.lastError.message, 'error');
-        return;
-      }
-      
-      if (response && response.success) {
-        isRunning = true;
-        startBtn.disabled = true;
-        stopBtn.disabled = false;
-        statusEl.textContent = 'Running...';
-        addLog('✅ Automation started', 'success');
-      }
-    });
-
-  } catch (error) {
-    addLog('❌ Error: ' + error.message, 'error');
-  }
-});
-
-// Stop automation
+// Stop automation - send to ALL Shopee tabs
 stopBtn.addEventListener('click', async () => {
   try {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const tabs = await chrome.tabs.query({ url: 'https://seller.shopee.com.my/*' });
     
-    chrome.tabs.sendMessage(tab.id, {
-      action: 'stop'
-    }, (response) => {
-      if (response && response.success) {
-        isRunning = false;
-        startBtn.disabled = false;
-        stopBtn.disabled = true;
-        quickStartBtn.disabled = false;
-        statusEl.textContent = 'Stopped';
-        addLog('⏸ Automation stopped', 'info');
-      }
-    });
+    for (const tab of tabs) {
+      chrome.tabs.sendMessage(tab.id, { action: 'stop' });
+    }
+    
+    isRunning = false;
+    quickStartBtn.style.display = 'inline-block';
+    stopBtn.style.display = 'none';
+    statusEl.textContent = 'Stopped';
+    addLog('⏹ Automation stopped', 'info');
 
   } catch (error) {
     addLog('❌ Error: ' + error.message, 'error');
@@ -145,16 +103,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   } else if (message.type === 'error') {
     addLog(message.message, 'error');
     isRunning = false;
-    startBtn.disabled = false;
-    stopBtn.disabled = true;
-    quickStartBtn.disabled = false;
+    quickStartBtn.style.display = 'inline-block';
+    stopBtn.style.display = 'none';
     statusEl.textContent = 'Error';
   } else if (message.type === 'complete') {
     addLog(message.message, 'success');
     isRunning = false;
-    startBtn.disabled = false;
-    stopBtn.disabled = true;
-    quickStartBtn.disabled = false;
+    quickStartBtn.style.display = 'inline-block';
+    stopBtn.style.display = 'none';
     statusEl.textContent = 'Completed';
   }
 });

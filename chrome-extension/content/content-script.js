@@ -130,9 +130,11 @@ async function startAutomation(settings) {
 
 // Stop the automation
 function stopAutomation() {
+  console.log('=== stopAutomation called ===');
   if (autoRater) {
-    autoRater.shouldStop = true;
-    logToBackground('Stop requested');
+    autoRater.isRunning = false; // This is what shopee-rater.js checks
+    console.log('Set autoRater.isRunning to false');
+    logToBackground('Stop requested - autoRater.isRunning set to false');
   }
   isRunning = false;
 }
