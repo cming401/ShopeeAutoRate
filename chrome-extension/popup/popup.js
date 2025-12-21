@@ -46,107 +46,58 @@ quickStartBtn.addEventListener('click', async () => {
     addLog('🚀 Opening Shopee Seller page...', 'info');
     statusEl.textContent = 'Opening page...';
     
-    console.log('Querying for existing Shopee tabs...');
     // Check if there's already a tab with Shopee seller page
     const tabs = await chrome.tabs.query({ url: 'https://seller.shopee.com.my/*' });
-    console.log('Found tabs:', tabs.length);
     
     let targetTab;
     if (tabs.length > 0) {
-      // Switch to existing tab and update URL
+      // Switch to existing tab
       targetTab = tabs[0];
-      console.log('Updating existing tab:', targetTab.id);
-      await chrome.tabs.update(targetTab.id, { 
-        url: shopeeUrl,
-        active: true 
-      });
-      addLog('✅ Switched to existing Shopee tab', 'success');
+      await chrome.tabs.update(targetTab.id, { active: true });
+      await chrome.tabs.reload(targetTab.id);
+      addLog('✅ Reloading existing Shopee tab', 'success');
     } else {
       // Create new tab
-      console.log('Creating new tab...');
       targetTab = await chrome.tabs.create({ 
         url: shopeeUrl,
         active: true 
       });
-      console.log('Created new tab:', targetTab.id);
       addLog('✅ Opened new Shopee tab', 'success');
     }
     
-    // Wait for page to load
+    // Wait for page to load and scripts to inject
     addLog('⏳ Waiting for page to load...', 'info');
     
-    // Use a different approach: wait and then send message
-    const waitForPageAndStart = async () => {
-      let attempts = 0;
-      const maxAttempts = 20; // Try for 10 seconds (20 * 500ms)
-      
-      const tryStart = async () => {
-        attempts++;
-        console.log(`Attempt ${attempts} to check if page is ready...`);
+    // Simple approach: wait 3 seconds then send message
+    setTimeout(async () => {
+      try {
+        const settings = {
+          comment: commentInput.value,
+          fastMode: fastModeCheck.checked,
+          maxPages: parseInt(maxPagesInput.value)
+        };
         
-        try {
-          // Check if tab still exists and is complete
-          const tab = await chrome.tabs.get(targetTab.id);
-          
-          if (tab.status === 'complete') {
-            console.log('Page is complete, sending start message...');
-            addLog('✅ Page loaded! Starting automation...', 'success');
-            
-            const settings = {
-              comment: commentInput.value,
-              fastMode: fastModeCheck.checked,
-              maxPages: parseInt(maxPagesInput.value)
-            };
-            
-            // Send start message
-            chrome.tabs.sendMessage(targetTab.id, {
-              action: 'start',
-              settings: settings
-            }, (response) => {
-              if (chrome.runtime.lastError) {
-                console.error('Send message error:', chrome.runtime.lastError);
-                addLog('❌ Error: ' + chrome.runtime.lastError.message, 'error');
-                statusEl.textContent = 'Error';
-                return;
-              }
-              
-              if (response && response.success) {
-                isRunning = true;
-                startBtn.disabled = true;
-                stopBtn.disabled = false;
-                quickStartBtn.disabled = true;
-                statusEl.textContent = 'Running...';
-                addLog('🎉 Automation started successfully!', 'success');
-              } else {
-                console.log('Response:', response);
-                addLog('⚠️ Failed to start automation', 'error');
-                statusEl.textContent = 'Failed';
-              }
-            });
-          } else if (attempts < maxAttempts) {
-            // Page not ready yet, try again
-            console.log('Page not ready, waiting...');
-            setTimeout(tryStart, 500);
-          } else {
-            addLog('❌ Timeout waiting for page to load', 'error');
-            statusEl.textContent = 'Timeout';
-          }
-        } catch (error) {
-          console.error('Error checking tab:', error);
-          if (attempts < maxAttempts) {
-            setTimeout(tryStart, 500);
-          } else {
-            addLog('❌ Error: ' + error.message, 'error');
-            statusEl.textContent = 'Error';
-          }
-        }
-      };
-      
-      // Start checking
-      setTimeout(tryStart, 1000); // Wait 1 second before first attempt
-    };
-    
-    waitForPageAndStart();
+        console.log('Sending start message to tab:', targetTab.id);
+        
+        // Send message without waiting for response
+        await chrome.tabs.sendMessage(targetTab.id, {
+          action: 'start',
+          settings: settings
+        });
+        
+        isRunning = true;
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        quickStartBtn.disabled = true;
+        statusEl.textContent = 'Running...';
+        addLog('🎉 Automation started!', 'success');
+        
+      } catch (error) {
+        console.error('Send message error:', error);
+        addLog('❌ Error: ' + error.message, 'error');
+        statusEl.textContent = 'Error - Try refreshing page manually';
+      }
+    }, 3000);
     
   } catch (error) {
     console.error('Quick Start error:', error);
