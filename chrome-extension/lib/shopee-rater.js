@@ -5,6 +5,10 @@
  * Run this in the browser console on the Shopee Seller Portal
  */
 
+// Prevent duplicate loading
+if (typeof window.ShopeeAutoRaterLoaded === 'undefined') {
+    window.ShopeeAutoRaterLoaded = true;
+
 class ShopeeAutoRater {
     constructor(fastMode = true) {
         this.comment = "Thank you for your supporting.";
@@ -460,19 +464,23 @@ class ShopeeAutoRater {
 }
 
 // Create global instance (默认快速模式)
-window.shopeeAutoRater = new ShopeeAutoRater(true);
+if (typeof window.shopeeAutoRater === 'undefined') {
+    window.shopeeAutoRater = new ShopeeAutoRater(true);
 
-// Usage instructions
-console.log('');
-console.log('⚡ Shopee Auto Rate Script Loaded! (Fast Mode Enabled)');
-console.log('');
-console.log('Commands:');
-console.log('  shopeeAutoRater.start()              - Start automation (fast mode)');
-console.log('  shopeeAutoRater.stop()               - Stop automation');
-console.log('  shopeeAutoRater.testSingleOrder()    - Test single order');
-console.log('  shopeeAutoRater.testPagination()     - Test next page button');
-console.log('');
-console.log('Advanced:');
-console.log('  new ShopeeAutoRater(true).start()    - Fast mode (default, ~3s/order)');
-console.log('  new ShopeeAutoRater(false).start()   - Normal mode (~8s/order)');
-console.log('');
+    // Usage instructions
+    console.log('');
+    console.log('⚡ Shopee Auto Rate Script Loaded! (Fast Mode Enabled)');
+    console.log('');
+    console.log('Commands:');
+    console.log('  shopeeAutoRater.start()              - Start automation (fast mode)');
+    console.log('  shopeeAutoRater.stop()               - Stop automation');
+    console.log('  shopeeAutoRater.testSingleOrder()    - Test single order');
+    console.log('  shopeeAutoRater.testPagination()     - Test next page button');
+    console.log('');
+    console.log('Advanced:');
+    console.log('  new ShopeeAutoRater(true).start()    - Fast mode (default, ~3s/order)');
+    console.log('  new ShopeeAutoRater(false).start()   - Normal mode (~8s/order)');
+    console.log('');
+}
+
+} // End of duplicate prevention check

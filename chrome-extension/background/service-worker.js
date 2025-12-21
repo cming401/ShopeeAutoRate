@@ -30,19 +30,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   return true;
 });
 
-// Handle tab updates to check if user is on Shopee seller page
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.status === 'complete' && tab.url && tab.url.includes('seller.shopee.com.my')) {
-    console.log('Shopee Seller page detected:', tab.url);
-    
-    // Inject content script if not already injected
-    chrome.scripting.executeScript({
-      target: { tabId: tabId },
-      files: ['lib/shopee-rater.js', 'content/content-script.js']
-    }).catch(err => {
-      console.log('Content script already injected or injection failed:', err.message);
-    });
-  }
-});
+// Content scripts are automatically injected via manifest.json
+// No need to manually inject here to avoid duplicate loading
 
 console.log('Service worker initialized successfully');

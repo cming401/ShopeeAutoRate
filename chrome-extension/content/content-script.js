@@ -1,6 +1,12 @@
 // Content script for Shopee Auto Rate Extension
 // Runs on Shopee Seller Order pages and communicates with popup
 
+// Prevent duplicate loading
+if (typeof window.ShopeeContentScriptLoaded !== 'undefined') {
+    console.log('Content script already loaded, skipping...');
+} else {
+    window.ShopeeContentScriptLoaded = true;
+
 console.log('Shopee Auto Rate content script loaded');
 
 let autoRater = null;
@@ -190,3 +196,5 @@ if (typeof ShopeeAutoRater !== 'undefined') {
 } else {
   console.warn('ShopeeAutoRater class not found. Make sure shopee-rater.js is loaded first.');
 }
+
+} // End of duplicate prevention check
