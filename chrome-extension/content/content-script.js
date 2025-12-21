@@ -141,31 +141,62 @@ function stopAutomation() {
 
 // Run automation with progress reporting
 async function runWithProgress(rater, maxPages) {
+  let consecutiveEmptyPages = 0;
+  
   // Process current page
-  while (!rater.shouldStop) {
+  while (rater.isRunning) {
     // Update progress
     sendToPopup('progress', {
-      processed: rater.totalProcessed,
+      processed: rater.ratedCount,
       currentPage: rater.currentPage,
       message: `Processing page ${rater.currentPage}...`
     });
+
+    // Check how many Rate buttons exist on this page
+    const rateButtons = document.querySelectorAll('button');
+    const rateButtonCount = Array.from(rateButtons).filter(btn => 
+      btn.textContent.trim() === 'Rate'
+    ).length;
+    
+    console.log(`Page ${rater.currentPage}: Found ${rateButtonCount} Rate buttons`);
+    
+    // If no Rate buttons found, stop immediately
+    if (rateButtonCount === 0) {
+      consecutiveEmptyPages++;
+      console.log(`No orders to rate on page ${rater.currentPage}. Empty pages: ${consecutiveEmptyPages}`);
+      
+      // Stop after 1 empty page - no more orders to rate!
+      if (consecutiveEmptyPages >= 1) {
+        sendToPopup('complete', {
+          message: `✅ Completed! No more orders to rate. Total: ${rater.ratedCount} orders.`
+        });
+        logToBackground('Stopping: No more orders to rate');
+        rater.isRunning = false;
+        break;
+      }
+    } else {
+      consecutiveEmptyPages = 0;
+    }
 
     // Process current page
     const pageResult = await rater.processCurrentPage();
     
     sendToPopup('success', {
-      message: `✅ Page ${rater.currentPage}: Rated ${pageResult.processed} orders`
+      message: `✅ Page ${rater.currentPage}: Rated ${pageResult ? pageResult.processed : rater.ratedCount} orders`
     });
 
     // Check if we should continue
     if (maxPages > 0 && rater.currentPage >= maxPages) {
       logToBackground(`Reached max pages limit: ${maxPages}`);
+      sendToPopup('complete', {
+        message: `✅ Completed! Reached max pages (${maxPages}). Total: ${rater.ratedCount} orders.`
+      });
       break;
     }
 
     // Go to next page
     sendToPopup('progress', {
-      processed: rater.totalProcessed,
+      processed: rater.ratedCount,
       currentPage: rater.currentPage,
       message: 'Moving to next page...'
     });
@@ -173,6 +204,9 @@ async function runWithProgress(rater, maxPages) {
     const nextSuccess = await rater.goToNextPage();
     if (!nextSuccess) {
       logToBackground('No more pages available');
+      sendToPopup('complete', {
+        message: `✅ Completed! No more pages. Total: ${rater.ratedCount} orders.`
+      });
       break;
     }
     
