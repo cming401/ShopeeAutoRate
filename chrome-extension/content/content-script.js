@@ -26,19 +26,26 @@ function logToBackground(message) {
 // Listen for messages from popup
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.log('Content script received message:', message);
+  logToBackground('Received message: ' + JSON.stringify(message));
 
   if (message.action === 'start') {
+    console.log('Start action triggered!');
+    logToBackground('Start action triggered!');
+    
     if (isRunning) {
+      console.log('Already running, rejecting');
       sendResponse({ success: false, error: 'Already running' });
       return true;
     }
 
     // Check if we're on the correct page
     if (!window.location.href.includes('seller.shopee.com.my/portal/sale/order')) {
+      console.log('Not on correct page');
       sendResponse({ success: false, error: 'Not on Shopee Seller Order page' });
       return true;
     }
 
+    console.log('Starting automation with settings:', message.settings);
     // Start automation
     startAutomation(message.settings);
     sendResponse({ success: true });
@@ -56,36 +63,48 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 // Start the automation process
 async function startAutomation(settings) {
+  console.log('=== startAutomation called ===');
+  console.log('Settings:', settings);
+  
   isRunning = true;
   logToBackground('Starting automation with settings: ' + JSON.stringify(settings));
 
   try {
     // Check if ShopeeAutoRater class is available
+    console.log('Checking for ShopeeAutoRater class...');
     if (typeof ShopeeAutoRater === 'undefined') {
       throw new Error('ShopeeAutoRater class not loaded. Please refresh the page.');
     }
+    console.log('ShopeeAutoRater class found!');
 
     // Create auto rater instance
+    console.log('Creating ShopeeAutoRater instance with fastMode:', settings.fastMode);
     autoRater = new ShopeeAutoRater(settings.fastMode);
+    console.log('ShopeeAutoRater instance created');
     
     // Override comment if provided
     if (settings.comment) {
       autoRater.comment = settings.comment;
+      console.log('Comment set to:', settings.comment);
     }
 
     // Set max pages
     const maxPages = settings.maxPages || 0;
+    console.log('Max pages:', maxPages);
 
     // Start the automation
+    console.log('Sending progress message...');
     sendToPopup('progress', {
       processed: 0,
       currentPage: 1,
       message: 'Starting automation...'
     });
 
+    console.log('Starting runWithProgress...');
     // Run the automation with progress reporting
     await runWithProgress(autoRater, maxPages);
 
+    console.log('Automation completed successfully');
     sendToPopup('complete', {
       message: `✅ Automation completed! Processed ${autoRater.totalProcessed} orders across ${autoRater.currentPage} pages.`
     });

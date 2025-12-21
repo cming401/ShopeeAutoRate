@@ -75,47 +75,78 @@ quickStartBtn.addEventListener('click', async () => {
     // Wait for page to load
     addLog('⏳ Waiting for page to load...', 'info');
     
-    // Listen for tab update (page loaded)
-    chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo, tab) {
-      if (tabId === targetTab.id && changeInfo.status === 'complete') {
-        chrome.tabs.onUpdated.removeListener(listener);
+    // Use a different approach: wait and then send message
+    const waitForPageAndStart = async () => {
+      let attempts = 0;
+      const maxAttempts = 20; // Try for 10 seconds (20 * 500ms)
+      
+      const tryStart = async () => {
+        attempts++;
+        console.log(`Attempt ${attempts} to check if page is ready...`);
         
-        // Wait a bit more for content script to be ready
-        setTimeout(async () => {
-          addLog('✅ Page loaded! Starting automation...', 'success');
+        try {
+          // Check if tab still exists and is complete
+          const tab = await chrome.tabs.get(targetTab.id);
           
-          const settings = {
-            comment: commentInput.value,
-            fastMode: fastModeCheck.checked,
-            maxPages: parseInt(maxPagesInput.value)
-          };
-          
-          // Send start message
-          chrome.tabs.sendMessage(targetTab.id, {
-            action: 'start',
-            settings: settings
-          }, (response) => {
-            if (chrome.runtime.lastError) {
-              addLog('❌ Error: ' + chrome.runtime.lastError.message, 'error');
-              statusEl.textContent = 'Error';
-              return;
-            }
+          if (tab.status === 'complete') {
+            console.log('Page is complete, sending start message...');
+            addLog('✅ Page loaded! Starting automation...', 'success');
             
-            if (response && response.success) {
-              isRunning = true;
-              startBtn.disabled = true;
-              stopBtn.disabled = false;
-              quickStartBtn.disabled = true;
-              statusEl.textContent = 'Running...';
-              addLog('🎉 Automation started successfully!', 'success');
-            } else {
-              addLog('⚠️ Failed to start automation', 'error');
-              statusEl.textContent = 'Failed';
-            }
-          });
-        }, 2000); // Wait 2 seconds for content script injection
-      }
-    });
+            const settings = {
+              comment: commentInput.value,
+              fastMode: fastModeCheck.checked,
+              maxPages: parseInt(maxPagesInput.value)
+            };
+            
+            // Send start message
+            chrome.tabs.sendMessage(targetTab.id, {
+              action: 'start',
+              settings: settings
+            }, (response) => {
+              if (chrome.runtime.lastError) {
+                console.error('Send message error:', chrome.runtime.lastError);
+                addLog('❌ Error: ' + chrome.runtime.lastError.message, 'error');
+                statusEl.textContent = 'Error';
+                return;
+              }
+              
+              if (response && response.success) {
+                isRunning = true;
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                quickStartBtn.disabled = true;
+                statusEl.textContent = 'Running...';
+                addLog('🎉 Automation started successfully!', 'success');
+              } else {
+                console.log('Response:', response);
+                addLog('⚠️ Failed to start automation', 'error');
+                statusEl.textContent = 'Failed';
+              }
+            });
+          } else if (attempts < maxAttempts) {
+            // Page not ready yet, try again
+            console.log('Page not ready, waiting...');
+            setTimeout(tryStart, 500);
+          } else {
+            addLog('❌ Timeout waiting for page to load', 'error');
+            statusEl.textContent = 'Timeout';
+          }
+        } catch (error) {
+          console.error('Error checking tab:', error);
+          if (attempts < maxAttempts) {
+            setTimeout(tryStart, 500);
+          } else {
+            addLog('❌ Error: ' + error.message, 'error');
+            statusEl.textContent = 'Error';
+          }
+        }
+      };
+      
+      // Start checking
+      setTimeout(tryStart, 1000); // Wait 1 second before first attempt
+    };
+    
+    waitForPageAndStart();
     
   } catch (error) {
     console.error('Quick Start error:', error);
