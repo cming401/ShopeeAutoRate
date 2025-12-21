@@ -40,70 +40,21 @@ maxPagesInput.addEventListener('change', () => {
 // Quick start: Open Shopee page and auto start
 quickStartBtn.addEventListener('click', async () => {
   console.log('Quick Start button clicked!');
-  try {
-    const shopeeUrl = 'https://seller.shopee.com.my/portal/sale/order?type=completed';
-    
-    addLog('🚀 Opening Shopee Seller page...', 'info');
-    statusEl.textContent = 'Opening page...';
-    
-    // Check if there's already a tab with Shopee seller page
-    const tabs = await chrome.tabs.query({ url: 'https://seller.shopee.com.my/*' });
-    
-    let targetTab;
-    if (tabs.length > 0) {
-      // Switch to existing tab
-      targetTab = tabs[0];
-      await chrome.tabs.update(targetTab.id, { active: true });
-      await chrome.tabs.reload(targetTab.id);
-      addLog('✅ Reloading existing Shopee tab', 'success');
-    } else {
-      // Create new tab
-      targetTab = await chrome.tabs.create({ 
-        url: shopeeUrl,
-        active: true 
-      });
-      addLog('✅ Opened new Shopee tab', 'success');
-    }
-    
-    // Wait for page to load and scripts to inject
-    addLog('⏳ Waiting for page to load...', 'info');
-    
-    // Simple approach: wait 3 seconds then send message
-    setTimeout(async () => {
-      try {
-        const settings = {
-          comment: commentInput.value,
-          fastMode: fastModeCheck.checked,
-          maxPages: parseInt(maxPagesInput.value)
-        };
-        
-        console.log('Sending start message to tab:', targetTab.id);
-        
-        // Send message without waiting for response
-        await chrome.tabs.sendMessage(targetTab.id, {
-          action: 'start',
-          settings: settings
-        });
-        
-        isRunning = true;
-        startBtn.disabled = true;
-        stopBtn.disabled = false;
-        quickStartBtn.disabled = true;
-        statusEl.textContent = 'Running...';
-        addLog('🎉 Automation started!', 'success');
-        
-      } catch (error) {
-        console.error('Send message error:', error);
-        addLog('❌ Error: ' + error.message, 'error');
-        statusEl.textContent = 'Error - Try refreshing page manually';
-      }
-    }, 3000);
-    
-  } catch (error) {
-    console.error('Quick Start error:', error);
-    addLog('❌ Error: ' + error.message, 'error');
-    statusEl.textContent = 'Error';
-  }
+  
+  const settings = {
+    comment: commentInput.value,
+    fastMode: fastModeCheck.checked,
+    maxPages: parseInt(maxPagesInput.value)
+  };
+  
+  // Send to service worker - it will handle everything even after popup closes
+  chrome.runtime.sendMessage({
+    type: 'quickStart',
+    settings: settings
+  });
+  
+  addLog('🚀 Starting... Check the Shopee tab!', 'info');
+  statusEl.textContent = 'Starting...';
 });
 
 // Add log entry
