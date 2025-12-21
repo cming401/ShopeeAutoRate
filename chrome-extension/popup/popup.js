@@ -39,19 +39,23 @@ maxPagesInput.addEventListener('change', () => {
 
 // Quick start: Open Shopee page and auto start
 quickStartBtn.addEventListener('click', async () => {
+  console.log('Quick Start button clicked!');
   try {
     const shopeeUrl = 'https://seller.shopee.com.my/portal/sale/order?type=completed';
     
     addLog('🚀 Opening Shopee Seller page...', 'info');
     statusEl.textContent = 'Opening page...';
     
+    console.log('Querying for existing Shopee tabs...');
     // Check if there's already a tab with Shopee seller page
     const tabs = await chrome.tabs.query({ url: 'https://seller.shopee.com.my/*' });
+    console.log('Found tabs:', tabs.length);
     
     let targetTab;
     if (tabs.length > 0) {
       // Switch to existing tab and update URL
       targetTab = tabs[0];
+      console.log('Updating existing tab:', targetTab.id);
       await chrome.tabs.update(targetTab.id, { 
         url: shopeeUrl,
         active: true 
@@ -59,10 +63,12 @@ quickStartBtn.addEventListener('click', async () => {
       addLog('✅ Switched to existing Shopee tab', 'success');
     } else {
       // Create new tab
+      console.log('Creating new tab...');
       targetTab = await chrome.tabs.create({ 
         url: shopeeUrl,
         active: true 
       });
+      console.log('Created new tab:', targetTab.id);
       addLog('✅ Opened new Shopee tab', 'success');
     }
     
@@ -112,6 +118,7 @@ quickStartBtn.addEventListener('click', async () => {
     });
     
   } catch (error) {
+    console.error('Quick Start error:', error);
     addLog('❌ Error: ' + error.message, 'error');
     statusEl.textContent = 'Error';
   }
