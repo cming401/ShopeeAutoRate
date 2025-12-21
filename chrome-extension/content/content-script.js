@@ -2,15 +2,13 @@
 // Runs on Shopee Seller Order pages and communicates with popup
 
 // Prevent duplicate loading
-if (typeof window.ShopeeContentScriptLoaded !== 'undefined') {
-    console.log('Content script already loaded, skipping...');
-} else {
+if (typeof window.ShopeeContentScriptLoaded === 'undefined') {
     window.ShopeeContentScriptLoaded = true;
 
 console.log('Shopee Auto Rate content script loaded');
 
-let autoRater = null;
-let isRunning = false;
+var autoRater = null;
+var isRunning = false;
 
 // Send message to popup
 function sendToPopup(type, data) {

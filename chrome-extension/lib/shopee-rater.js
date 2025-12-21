@@ -6,8 +6,7 @@
  */
 
 // Prevent duplicate loading
-if (typeof window.ShopeeAutoRaterLoaded === 'undefined') {
-    window.ShopeeAutoRaterLoaded = true;
+if (typeof window.ShopeeAutoRater === 'undefined') {
 
 class ShopeeAutoRater {
     constructor(fastMode = true) {
@@ -462,6 +461,9 @@ class ShopeeAutoRater {
         }
     }
 }
+
+// Register class globally
+window.ShopeeAutoRater = ShopeeAutoRater;
 
 // Create global instance (默认快速模式)
 if (typeof window.shopeeAutoRater === 'undefined') {
