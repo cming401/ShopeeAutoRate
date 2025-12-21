@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopee Auto Rate</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🌟 Shopee Auto Rate</h1>
+      <p class="subtitle">Automatically rate all buyers with 5 stars</p>
+    </div>
+
+    <div class="status-section">
+      <div class="status-item">
+        <span class="label">Status:</span>
+        <span id="status" class="value">Ready</span>
+      </div>
+      <div class="status-item">
+        <span class="label">Processed:</span>
+        <span id="processed" class="value">0</span>
+      </div>
+      <div class="status-item">
+        <span class="label">Current Page:</span>
+        <span id="current-page" class="value">1</span>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>Settings</h3>
+      <div class="setting-item">
+        <label for="comment">Comment:</label>
+        <input type="text" id="comment" value="Thank you for your supporting." />
+      </div>
+      <div class="setting-item">
+        <label for="fast-mode">
+          <input type="checkbox" id="fast-mode" checked />
+          Fast Mode (3.2s/order)
+        </label>
+      </div>
+      <div class="setting-item">
+        <label for="max-pages">Max Pages (0 = all):</label>
+        <input type="number" id="max-pages" value="0" min="0" />
+      </div>
+    </div>
+
+    <div class="button-section">
+      <button id="start-btn" class="btn btn-primary">
+        ▶ Start Auto Rating
+      </button>
+      <button id="stop-btn" class="btn btn-secondary" disabled>
+        ⏸ Stop
+      </button>
+    </div>
+
+    <div class="logs-section">
+      <h3>Activity Log</h3>
+      <div id="logs" class="logs"></div>
+    </div>
+
+    <div class="footer">
+      <p>⚠️ Make sure you're on the Shopee Seller Order page</p>
+      <p class="version">Version 1.0.0</p>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
