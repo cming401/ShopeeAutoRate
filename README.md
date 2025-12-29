@@ -25,15 +25,15 @@ A simple and powerful Chrome extension that helps Shopee sellers save time by au
 ## ✨ Features
 
 - 🎯 **One-Click Start**
-- - Automatically opens Shopee page and starts rating
+- Automatically opens Shopee page and starts rating
 - ⭐ **5-Star Ratings**
-- - Rates all buyers with 5 stars automatically
+- Rates all buyers with 5 stars automatically
 - ⚡ **Fast Mode**
-- - Process orders in ~3.2 seconds each
+- Process orders in ~3.2 seconds each
 - 📊 **Progress Tracking**
-- - Real-time stats and activity log
+- Real-time stats and activity log
 - 🔄 **Multi-Page Support**
-- - Automatically processes all pages
+- Automatically processes all pages
 
 ---
 
