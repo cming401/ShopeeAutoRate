@@ -3,7 +3,6 @@
 <div align="center">
 
 🚀 **Automatically rate all your Shopee buyers with 5 stars in one click!**
-<img width="399" height="511" alt="image" src="https://github.com/user-attachments/assets/17621398-b7dd-42cd-a26a-9e9ded11f5ce" />
 
 
 <br>
@@ -21,6 +20,9 @@
 </div>
 
 A simple and powerful Chrome extension that helps Shopee sellers save time by automatically rating completed orders.
+
+<img width="399" height="511" alt="image" src="https://github.com/user-attachments/assets/17621398-b7dd-42cd-a26a-9e9ded11f5ce" />
+
 
 ---
 
